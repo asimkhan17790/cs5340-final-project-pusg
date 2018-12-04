@@ -2,7 +2,7 @@ import React from 'react';
 import { Title, TextInput, Button, Appbar, HelperText } from 'react-native-paper';
 import  { View, Text, StyleSheet } from 'react-native';
 
-export default class Login extends React.Component {
+export default class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,24 +20,34 @@ export default class Login extends React.Component {
     }
   }
 
-  get login() {
+  get signUp() {
     return () => {
       if(this.state.email !== '' && this.state.password !== ''){
-        console.log('Navigate')
         // this.props.navigation.navigate('home');
       }
     }
   }
 
+  static navigationOptions = {
+    headerLeft: null,
+    headerStyle: {
+      backgroundColor: '#3b5b66',
+      shadowOpacity: 0,
+      borderBottomWidth: 0
+    },
+    title: 'PUSG',
+    headerTitleStyle: {
+      color: '#e99b44',
+      textAlign: 'center',
+      width: '100%',
+      fontSize: 24
+    },
+  };
+
   render() {
     return(
       <View style={styles.common}>
         <View style={styles.header}>
-          <Appbar.Header>
-            <Title style={styles.brandingText}>
-              PUSG
-            </Title>
-          </Appbar.Header>
           <Text style={styles.subHeading}>
             Efficiently Organize Study Groups
           </Text>
@@ -63,20 +73,17 @@ export default class Login extends React.Component {
             secureTextEntry={true}
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
-            onSubmitEditing={this.login}
+            onSubmitEditing={this.signUp}
           />
         </View>
         <View style={styles.loginButton}>
           <Button
             mode="contained"
             disabled={this.state.email === '' || this.state.password === ''}
-            onPress={this.login}>
+            onPress={this.signUp}>
             Sign Up
           </Button>
         </View>
-        <Text style={styles.exitApp}>
-          Exit Application
-        </Text>
         <View style={{flexDirection: 'row', margin: 10}}>
           <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
           <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
@@ -85,8 +92,8 @@ export default class Login extends React.Component {
         <View style={styles.signUpButton}>
           <Button
             mode="outlined"
-            onPress={() => console.log('Pressed', this.state.email)}>
-            Create New Account
+            onPress={() => this.props.navigation.navigate('login')}>
+            Already Have an Account?
           </Button>
         </View>
       </View>
@@ -106,18 +113,11 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     padding: 10,
-    marginTop: 10
+    marginTop: 15
   },
   header: {
-    height: 150,
+    height: 60,
     backgroundColor: '#3b5b66',
-  },
-  brandingText: {
-    color: '#e99b44',
-    marginTop: 20,
-    textAlign: 'center',
-    width: '100%',
-    fontSize: 24
   },
   forgotPassword: {
     color: '#666',

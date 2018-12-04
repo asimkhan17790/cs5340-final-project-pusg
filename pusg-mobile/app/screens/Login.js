@@ -1,6 +1,7 @@
 import React from 'react';
 import { Title, TextInput, Button, Appbar, HelperText } from 'react-native-paper';
-import  { View, Text, StyleSheet } from 'react-native';
+import  { View, Text, StyleSheet, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -11,6 +12,22 @@ export default class Login extends React.Component {
       emailError: false
     };
   }
+
+  static navigationOptions = {
+    headerLeft: null,
+    headerStyle: {
+      backgroundColor: '#3b5b66',
+      shadowOpacity: 0,
+      borderBottomWidth: 0
+    },
+    title: 'PUSG',
+    headerTitleStyle: {
+      color: '#e99b44',
+      textAlign: 'center',
+      width: '100%',
+      fontSize: 24
+    },
+  };
 
   get validateEmail() {
     return () => {
@@ -23,21 +40,22 @@ export default class Login extends React.Component {
   get login() {
     return () => {
       if(this.state.email !== '' && this.state.password !== ''){
-        console.log('Navigate')
-        // this.props.navigation.navigate('home');
+        this.props.navigation.navigate('signUp');
       }
     }
   }
 
   render() {
+    const MyStatusBar = ({backgroundColor, ...props}) => (
+      <View style={[styles.statusBar, { backgroundColor }]}>
+        <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+      </View>
+    );
+
     return(
       <View style={styles.common}>
+        <MyStatusBar backgroundColor="#5E8D48" barStyle="dark-content" />
         <View style={styles.header}>
-          <Appbar.Header>
-            <Title style={styles.brandingText}>
-              PUSG
-            </Title>
-          </Appbar.Header>
           <Text style={styles.subHeading}>
             Efficiently Organize Study Groups
           </Text>
@@ -112,15 +130,8 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   header: {
-    height: 150,
+    height: 60,
     backgroundColor: '#3b5b66',
-  },
-  brandingText: {
-    color: '#e99b44',
-    marginTop: 20,
-    textAlign: 'center',
-    width: '100%',
-    fontSize: 24
   },
   forgotPassword: {
     color: '#666',
