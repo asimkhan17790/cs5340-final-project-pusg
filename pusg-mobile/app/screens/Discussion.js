@@ -1,9 +1,62 @@
 import * as React from 'react';
-import  { View, Text, StyleSheet, ScrollView } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { BottomNavigation, List, Button } from 'react-native-paper';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat } from 'react-native-gifted-chat';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 let navigation = '';
+
+class HeaderRight extends React.Component {
+  render() {
+    return(
+      <View style={{flexDirection: 'row', margin: 10}}>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            marginRight: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('profile')}
+                name="user-circle" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('login')}
+                name="sign-out" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+      </View>
+    )
+  };
+}
 
 class DiscussionRoute extends React.Component {
   state = {
@@ -36,14 +89,18 @@ class DiscussionRoute extends React.Component {
 
   render() {
     return(
-      <ScrollView style={styles.chatPage}>
-        <Text style={styles.pageTitle}>
-          Group 1
-        </Text>
-        <Text style={styles.courseText}>
-          Course: CS5200
-        </Text>
-        <GiftedChat messages={this.state.messages} />
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.pageTitle}>
+            Group 1
+          </Text>
+          <Text style={styles.courseText}>
+            Course: CS5200
+          </Text>
+        </View>
+        <ScrollView style={styles.chatPage}>
+          <GiftedChat messages={this.state.messages} />
+        </ScrollView>
       </ScrollView>
     )
   }
@@ -53,7 +110,6 @@ class MeetingsRoute extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       pastMeetings: [],
       upcomingMeetings: [],
@@ -118,7 +174,6 @@ export default class Discussion extends React.Component {
   });
 
   static navigationOptions = {
-    headerLeft: null,
     headerStyle: {
       backgroundColor: '#3b5b66',
       shadowOpacity: 0,
@@ -131,6 +186,10 @@ export default class Discussion extends React.Component {
       width: '100%',
       fontSize: 24
     },
+    headerBackTitleStyle: {
+      color: 'white',
+    },
+    headerRight: (<HeaderRight/>)
   };
 
   render() {
@@ -151,7 +210,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#3b5b66'
   },
   chatPage:{
-    
   },
   returnButton: {
     padding: 10,

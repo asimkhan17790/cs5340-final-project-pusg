@@ -1,8 +1,8 @@
 {
   "studentList": [
-    {"name": "Sabrina A.", "email": "sabrina.a@husky.neu.edu"},
-    {"name": "Brandon C.", "email": "brandon.c@husky.neu.edu"},
-    {"name": "Charlie A.", "email": "charlie.a@husky.neu.edu"}
+    {"label": "Sabrina A.", "value": "sabrina.a@husky.neu.edu"},
+    {"label": "Brandon C.", "value": "brandon.c@husky.neu.edu"},
+    {"label": "Charlie A.", "value": "charlie.a@husky.neu.edu"}
   ],
   "groups": [
     {

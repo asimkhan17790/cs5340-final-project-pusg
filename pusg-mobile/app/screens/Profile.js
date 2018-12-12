@@ -1,26 +1,44 @@
 import React from 'react';
 import { TextInput, Button, HelperText, Snackbar } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const HeaderLeft = () => {
-  return (
-    <View styles={styles.headerLeft}>
-      <Text style={styles.headerLeftText}>
-        Home
-      </Text>
-      <Icon style={styles.backIcon}
-            onPress={this._showDateTimePicker}
-            name="arrow-left" size={16}
-            color="#fff"/>
-    </View>
-  )
-};
+let navigation = '';
+
+class HeaderRight extends React.Component {
+  render() {
+    return(
+      <TouchableOpacity
+        style={{
+          height: 45,
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'center',
+          flex: 1,
+          margin: 5,
+          marginTop: 10,
+          marginRight: 10,
+          shadowColor: 'black',
+          shadowOpacity: 0.5,
+          shadowOffset: {
+            width: 2,
+            height: 2,
+          }
+        }}
+      >
+        <Icon onPress={() => navigation.navigate('login')}
+              name="sign-out" size={26}
+              color="#fff"/>
+      </TouchableOpacity>
+    )
+  };
+}
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
+    navigation = this.props.navigation;
     this.state = {
       email: '',
       password: '',
@@ -64,7 +82,6 @@ export default class Profile extends React.Component {
   }
 
   static navigationOptions = {
-    headerLeft: (<HeaderLeft/>),
     headerStyle: {
       backgroundColor: '#3b5b66',
       shadowOpacity: 0,
@@ -77,6 +94,10 @@ export default class Profile extends React.Component {
       width: '100%',
       fontSize: 24
     },
+    headerBackTitleStyle: {
+      color: 'white',
+    },
+    headerRight: (<HeaderRight/>)
   };
 
   render() {

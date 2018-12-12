@@ -1,19 +1,76 @@
 import React from 'react';
-import { Surface, Button } from 'react-native-paper';
+import { Surface, Button, Dialog, Snackbar, Portal, Paragraph } from 'react-native-paper';
 import  { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+let navigation = '';
+
+class HeaderRight extends React.Component {
+  render() {
+    return(
+      <View style={{flexDirection: 'row', margin: 10}}>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            marginRight: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('profile')}
+                name="user-circle" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('login')}
+                name="sign-out" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+      </View>
+    )
+  };
+}
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
+    navigation = this.props.navigation;
     this.state = {
       email: '',
       password: '',
-      emailError: false
+      emailError: false,
+      visible: false,
+      snackBarVisible: false
     };
   }
 
-  static navigationOptions = {
-    headerLeft: null,
+  static navigationOptions = ({navigation}) => ({
     headerStyle: {
       backgroundColor: '#3b5b66',
       shadowOpacity: 0,
@@ -26,6 +83,25 @@ export default class Home extends React.Component {
       width: '100%',
       fontSize: 24
     },
+    headerBackTitleStyle: {
+      color: 'white',
+    },
+    headerRight: (<HeaderRight/>)
+  });
+
+  _showDialog = () => this.setState({ visible: true });
+
+  _hideDialog = () => {
+    this.setState({
+      visible: false
+    })
+  };
+
+  _registerGroup = () => {
+    this.setState({
+      visible: false,
+      snackBarVisible: true
+    })
   };
 
   render() {
@@ -74,7 +150,7 @@ export default class Home extends React.Component {
             Group 3
           </Text>
           <View style={{flexDirection: 'column', justifyContent: 'flex-end'}}>
-            <Button mode="outlined">
+            <Button mode="outlined" onPress={this._showDialog}>
               Join
             </Button>
           </View>
@@ -89,6 +165,29 @@ export default class Home extends React.Component {
             Create New Study Group
           </Button>
         </View>
+        <Portal>
+          <Dialog
+            visible={this.state.visible}
+            onDismiss={this._hideDialog}>
+            <Dialog.Title>Confirmation</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>Are you sure you want to join Group 3?</Paragraph>
+            </Dialog.Content>
+            <View>
+              <Dialog.Actions>
+                <Button onPress={this._registerGroup}>Yes</Button>
+                <Button onPress={this._hideDialog}>Cancel</Button>
+              </Dialog.Actions>
+            </View>
+          </Dialog>
+        </Portal>
+        <Snackbar
+          visible={this.state.snackBarVisible}
+          duration="1500"
+          onDismiss={() => this.setState({ snackBarVisible: false })}
+        >
+          Group Joined Successfully!
+        </Snackbar>
       </ScrollView>
     )
   }

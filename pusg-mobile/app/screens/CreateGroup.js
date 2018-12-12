@@ -1,15 +1,74 @@
+
 import React from 'react';
-import { TextInput, Button, HelperText } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { TextInput, Button, HelperText, Portal, Dialog , TouchableRipple, Subheading } from 'react-native-paper';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import constants from '../constants.json';
 import { Header } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import SelectMultiple from 'react-native-select-multiple'
+
+
+let navigation = '';
+
+class HeaderRight extends React.Component {
+  render() {
+    return(
+      <View style={{flexDirection: 'row', margin: 10}}>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            marginRight: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('profile')}
+                name="user-circle" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('login')}
+                name="sign-out" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+      </View>
+    )
+  };
+}
 
 export default class CreateGroup extends React.Component {
   constructor(props) {
     super(props);
+    navigation = this.props.navigation;
     this.state = {
       description: '',
-      memberList: '',
+      memberList: [],
       name: '',
       descriptionError: false,
       nameError: false,
@@ -18,8 +77,25 @@ export default class CreateGroup extends React.Component {
       isEnabled: false,
       autoCompleteHeight: 0,
       createGroupButtonMarginTop: 0,
+      visible: false,
+      checked: false
     };
   }
+
+  onSelectionsChange = (memberList) => {
+    this.setState({ memberList })
+  };
+
+  _showDialog = () => this.setState({ visible: true });
+
+  _hideDialog = () => this.setState({ visible: false });
+
+  _addStudents = () => {
+    this.setState({
+      visible: false,
+      snackBarVisible: true
+    })
+  };
 
   get validateDescription() {
     return () => {
@@ -53,12 +129,7 @@ export default class CreateGroup extends React.Component {
     }
   }
 
-  checkIsEnabled(isEnabled) {
-    this.setState({ isEnabled });
-  }
-
   static navigationOptions = {
-    headerLeft: null,
     headerStyle: {
       backgroundColor: '#3b5b66',
       shadowOpacity: 0,
@@ -71,15 +142,20 @@ export default class CreateGroup extends React.Component {
       width: '100%',
       fontSize: 24
     },
+    headerBackTitleStyle: {
+      color: 'white',
+    },
+    headerRight: (<HeaderRight/>)
   };
 
-  render() {
-    return(
 
+  render() {
+    const { checked } = this.state;
+    return(
       <KeyboardAvoidingView keyboardShouldPersistTaps="handled"
                             behavior="padding"
                             style={{flex: 1}}
-                            keyboardVerticalOffset={Header.HEIGHT + 40}>
+                            keyboardVerticalOffset={Header.HEIGHT + 20}>
         <ScrollView>
           <View style={styles.header}>
             <Text style={styles.subHeading}>
@@ -120,45 +196,10 @@ export default class CreateGroup extends React.Component {
             >
               Description can not be empty.
             </HelperText>
-            <TextInput
-              style={styles.input}
-              label="Member List"
-              placeholder="Comma separated list of emails"
-              model="outlined"
-              error={this.state.memberListError}
-              value={this.state.memberList}
-              onChangeText={memberList => this.setState({ memberList })}
-              onBlur={this.validateMemberList}
-            />
-            <HelperText
-              type="error"
-              visible={this.state.memberListError}
-            >
-              Member list can not be empty
-            </HelperText>
-
+            <Button mode="text" onPress={this._showDialog}>
+              Select Members to Add
+            </Button>
           </View>
-          {/*<ScrollView*/}
-            {/*onLayout={(event) => {*/}
-              {/*const {x, y, width, height} = event.nativeEvent.layout;*/}
-              {/*this.state.autoCompleteHeight = height;*/}
-              {/*console.log(height);*/}
-              {/*this.updateHeight();*/}
-            {/*}}*/}
-            {/*contentContainerStyle={styles.container}*/}
-            {/*style={styles.root}*/}
-            {/*keyboardShouldPersistTaps="handled">*/}
-            {/*<View>*/}
-              {/*<AutocompleteChips*/}
-                {/*ref={c => this._emailField = c}*/}
-                {/*itemId="name"*/}
-                {/*items={this.state.allStudents}*/}
-                {/*onSubmitEditing={isEnabled => this.checkIsEnabled(isEnabled)}*/}
-                {/*onChipClose={isEnabled => this.checkIsEnabled(isEnabled)}*/}
-                {/*onChangeSelectedItems={this.updateHeight()}*/}
-              {/*/>*/}
-            {/*</View>*/}
-          {/*</ScrollView>*/}
           <View style={styles.createGroupButton}>
             <Button
               mode="contained"
@@ -171,6 +212,29 @@ export default class CreateGroup extends React.Component {
             Cancel
           </Text>
         </ScrollView>
+        <Portal>
+          <Dialog
+            visible={this.state.visible}
+            onDismiss={this._hideDialog}>
+            <Dialog.Title>Choose Members</Dialog.Title>
+            <Dialog.ScrollArea style={{ maxHeight: 170, paddingHorizontal: 0 }}>
+            <ScrollView>
+              <View>
+                <SelectMultiple
+                  items={this.state.allStudents}
+                  selectedItems={this.state.memberList}
+                  onSelectionsChange={this.onSelectionsChange} />
+              </View>
+            </ScrollView>
+          </Dialog.ScrollArea>
+            <View>
+              <Dialog.Actions>
+                <Button onPress={this._addStudents}>Submit</Button>
+                <Button onPress={this._hideDialog}>Cancel</Button>
+              </Dialog.Actions>
+            </View>
+          </Dialog>
+        </Portal>
       </KeyboardAvoidingView>
     )
   }
@@ -180,23 +244,24 @@ const styles = StyleSheet.create({
   container: {
     padding: 10
   },
+  autoCompleteContainer: {
+    flex: 1,
+    justifyContent: 'space-between'
+  },
+  autoCompleteRoot: {
+    flex: 1,
+    padding: 20
+  },
   createGroupButton: {
     paddingHorizontal: 10,
     marginBottom: 15,
-    // marginTop: 80
+    marginTop: 20
   },
   input: {
     backgroundColor: '#fff'
   },
   returnButton: {
     padding: 10,
-  },
-  root: {
-    zIndex: 10,
-    position: 'absolute',
-    top: 250,
-    width: '100%',
-    height: '100%',
   },
   pageTitle:{
     fontSize: 16,
@@ -233,5 +298,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#3b5b66',
     fontSize: 12
-  }
+  },
+  dialogRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
 });

@@ -33,7 +33,7 @@ const AppNavigator = createStackNavigator(
     profile: Profile
   },
   {
-    initialRouteName: 'home',
+    initialRouteName: 'createGroup',
   }
 );
 

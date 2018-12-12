@@ -5,9 +5,64 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+let navigation = '';
+
+class HeaderRight extends React.Component {
+  render() {
+    return(
+      <View style={{flexDirection: 'row', margin: 10}}>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            marginRight: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('profile')}
+                name="user-circle" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            flex: 1,
+            margin: 5,
+            marginTop: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.5,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            }
+          }}
+        >
+          <Icon onPress={() => navigation.navigate('login')}
+                name="sign-out" size={26}
+                color="#fff"/>
+        </TouchableOpacity>
+      </View>
+    )
+  };
+}
+
 export default class CreateMeeting extends React.Component {
   constructor(props) {
     super(props);
+    navigation = this.props.navigation;
     this.state = {
       title: '',
       description: '',
@@ -74,7 +129,6 @@ export default class CreateMeeting extends React.Component {
   }
 
   static navigationOptions = {
-    headerLeft: null,
     headerStyle: {
       backgroundColor: '#3b5b66',
       shadowOpacity: 0,
@@ -87,6 +141,10 @@ export default class CreateMeeting extends React.Component {
       width: '100%',
       fontSize: 24
     },
+    headerBackTitleStyle: {
+      color: 'white',
+    },
+    headerRight: (<HeaderRight/>)
   };
 
   render() {
