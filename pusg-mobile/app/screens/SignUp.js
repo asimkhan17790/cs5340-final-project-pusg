@@ -1,5 +1,5 @@
 import React from 'react';
-import { Title, TextInput, Button, Appbar, HelperText } from 'react-native-paper';
+import { TextInput, Button, HelperText } from 'react-native-paper';
 import  { View, Text, StyleSheet } from 'react-native';
 
 export default class SignUp extends React.Component {
@@ -8,7 +8,10 @@ export default class SignUp extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailError: false
+      name: '',
+      emailError: false,
+      nameError: false,
+      passwordError: false
     };
   }
 
@@ -20,10 +23,26 @@ export default class SignUp extends React.Component {
     }
   }
 
+  get validateName() {
+    return () => {
+      this.setState({
+        nameError: this.state.name.length === 0
+      })
+    }
+  }
+
+  get validatePassword() {
+    return () => {
+      this.setState({
+        passwordError: this.state.password === '' || this.state.password.length <= 8
+      })
+    }
+  }
+
   get signUp() {
     return () => {
-      if(this.state.email !== '' && this.state.password !== ''){
-        // this.props.navigation.navigate('home');
+      if(this.state.email !== '' && this.state.password !== '' && this.state.name !== ''){
+        this.props.navigation.navigate('home');
       }
     }
   }
@@ -54,6 +73,20 @@ export default class SignUp extends React.Component {
         </View>
         <View style={styles.container}>
           <TextInput
+            label='Name'
+            model="outlined"
+            value={this.state.name}
+            error={this.state.nameError}
+            onChangeText={name => this.setState({ name })}
+            onBlur={this.validateName}
+          />
+          <HelperText
+            type="error"
+            visible={this.state.nameError}
+          >
+            Name can not be empty
+          </HelperText>
+          <TextInput
             label='University Email'
             model="outlined"
             error={this.state.emailError}
@@ -72,11 +105,19 @@ export default class SignUp extends React.Component {
             model="outlined"
             secureTextEntry={true}
             value={this.state.password}
+            error={this.state.passwordError}
             onChangeText={password => this.setState({ password })}
+            onBlur={this.validatePassword}
             onSubmitEditing={this.signUp}
           />
+          <HelperText
+            type="error"
+            visible={this.state.passwordError}
+          >
+            Password should contain at least 8 characters
+          </HelperText>
         </View>
-        <View style={styles.loginButton}>
+        <View style={styles.signUpButton}>
           <Button
             mode="contained"
             disabled={this.state.email === '' || this.state.password === ''}
@@ -89,7 +130,7 @@ export default class SignUp extends React.Component {
           <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
           <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
         </View>
-        <View style={styles.signUpButton}>
+        <View style={styles.returnButton}>
           <Button
             mode="outlined"
             onPress={() => this.props.navigation.navigate('login')}>
@@ -105,15 +146,14 @@ const styles = StyleSheet.create({
   container: {
     padding: 10
   },
-  loginButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 10
+  signUpButton: {
+    paddingHorizontal: 10,
+    marginBottom: 15
   },
   common: {
   },
-  signUpButton: {
+  returnButton: {
     padding: 10,
-    marginTop: 15
   },
   header: {
     height: 60,

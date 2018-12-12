@@ -1,7 +1,6 @@
 import React from 'react';
-import { Title, TextInput, Button, Appbar, HelperText } from 'react-native-paper';
-import  { View, Text, StyleSheet, StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { TextInput, Button, HelperText } from 'react-native-paper';
+import  { View, Text, StyleSheet } from 'react-native';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -40,21 +39,14 @@ export default class Login extends React.Component {
   get login() {
     return () => {
       if(this.state.email !== '' && this.state.password !== ''){
-        this.props.navigation.navigate('signUp');
+        this.props.navigation.navigate('home');
       }
     }
   }
 
   render() {
-    const MyStatusBar = ({backgroundColor, ...props}) => (
-      <View style={[styles.statusBar, { backgroundColor }]}>
-        <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-      </View>
-    );
-
     return(
       <View style={styles.common}>
-        <MyStatusBar backgroundColor="#5E8D48" barStyle="dark-content" />
         <View style={styles.header}>
           <Text style={styles.subHeading}>
             Efficiently Organize Study Groups
@@ -95,9 +87,6 @@ export default class Login extends React.Component {
             Login
           </Button>
         </View>
-        <Text style={styles.exitApp}>
-          Exit Application
-        </Text>
         <View style={{flexDirection: 'row', margin: 10}}>
           <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
           <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
@@ -106,7 +95,7 @@ export default class Login extends React.Component {
         <View style={styles.signUpButton}>
           <Button
             mode="outlined"
-            onPress={() => console.log('Pressed', this.state.email)}>
+            onPress={() => this.props.navigation.navigate('signUp')}>
             Create New Account
           </Button>
         </View>
@@ -138,13 +127,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'right',
     padding: 10,
-    width: '100%',
-  },
-  exitApp: {
-    color: '#3b5b66',
-    fontSize: 12,
-    textAlign: 'center',
-    padding: 20,
     width: '100%',
   },
   subHeading: {
