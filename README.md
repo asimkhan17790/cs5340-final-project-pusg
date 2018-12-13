@@ -2,7 +2,7 @@
 React Native App for Study Groups mobile application
 
 
-Please Note:  **This application is just to showcase our digital prototypes in a real-world application. This application does not have a real backend, thus it is a stateless application and some of the functionality of this application may not work like a real application. For example, you may lose changes when you leave the application**
+Please Note:  **This is an iOS application to showcase the user-interface of the digital prototypes we developed in this course. This application does not have a real backend, thus it is a stateless application and some of the functionality of this application may not work like a real application. For example, you may lose changes when you leave the application**
 
 
 Test User:
