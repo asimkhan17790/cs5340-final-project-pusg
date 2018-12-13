@@ -129,12 +129,14 @@ class MeetingsRoute extends React.Component {
             title="Past Meetings"
           >
             <List.Item title="Discuss Doubts about Chapter 1" />
+            <Text style={{marginLeft: 15}}>at Snell Library on December 20 6:00 PM</Text>
           </List.Accordion>
 
           <List.Accordion
             title="Upcoming Meetings"
           >
             <List.Item title="Weekly Discussion Meeting" />
+            <Text style={{marginLeft: 15}}>at Ell Hall 108 on December 24 6:00 PM</Text>
           </List.Accordion>
         </List.Section>
         <View style={styles.createMeetingButton}>
