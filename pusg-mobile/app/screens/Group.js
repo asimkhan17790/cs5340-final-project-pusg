@@ -74,6 +74,7 @@ export default class Group extends React.Component {
       otherGroups: [],
       groupJoining: {}
     };
+
     AsyncStorage.multiGet(['courses', 'groups', 'email']).then((data) => {
       let course = JSON.parse(data[0][1]).find((item) => item.courseId === this.state.courseId);
       let userEmail = data[2][1];
@@ -134,9 +135,8 @@ export default class Group extends React.Component {
       if(item.id === this.state.groupJoining.id) {
         item.members.push(this.state.email);
       }});
-    console.log("group", groupList);
     AsyncStorage.setItem("groups", JSON.stringify(groupList)).then((res) => {
-      console.log("Updated successfully!")
+      console.log("Added group successfully!")
     });
   };
 
@@ -199,7 +199,7 @@ export default class Group extends React.Component {
         <View style={styles.createGroupButton}>
           <Button
             mode="contained"
-            onPress={() => this.props.navigation.navigate('createGroup')}>
+            onPress={() => this.props.navigation.navigate('createGroup', {courseId: this.state.courseId})}>
             Create New Study Group
           </Button>
         </View>

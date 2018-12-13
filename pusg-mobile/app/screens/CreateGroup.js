@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { TextInput, Button, HelperText, Portal, Dialog } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar, AsyncStorage } from 'react-native';
 import constants from '../constants.json';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -70,6 +69,8 @@ export default class CreateGroup extends React.Component {
       description: '',
       memberList: [],
       name: '',
+      email: '',
+      courseId: navigation.getParam('courseId', 'CS5200'),
       descriptionError: false,
       nameError: false,
       memberListError: false,
@@ -79,6 +80,13 @@ export default class CreateGroup extends React.Component {
       createGroupButtonMarginTop: 0,
       visible: false,
     };
+
+    AsyncStorage.multiGet(['courses', 'email']).then((data) => {
+      this.setState({
+        courses: JSON.parse(data[0][1]),
+        email: JSON.parse(data[1][1])
+      })
+    });
   }
 
   onSelectionsChange = (memberList) => {
@@ -122,8 +130,18 @@ export default class CreateGroup extends React.Component {
 
   get createGroup() {
     return () => {
-      if(this.state.email !== '' && this.state.password !== '' && this.state.name !== ''){
-        this.props.navigation.navigate('home');
+      if(this.state.name !== '' && this.state.description !== ''){
+        let group = {
+          name: this.state.name,
+          description: this.state.description,
+          members: [...this.state.memberList, this.state.email],
+          id: new Date().toString(),
+          course: this.state.courseId
+        };
+        AsyncStorage.setItem('groups', JSON.stringify([...constants.groups, group])).then((res) => {
+          console.log("Done")
+          this.props.navigation.navigate('group');
+        });
       }
     }
   }
@@ -205,7 +223,7 @@ export default class CreateGroup extends React.Component {
           <View style={styles.createGroupButton}>
             <Button
               mode="contained"
-              disabled={this.state.email === '' || this.state.password === ''}
+              disabled={this.state.name === '' || this.state.description === ''}
               onPress={this.createGroup}>
               Create Group
             </Button>
