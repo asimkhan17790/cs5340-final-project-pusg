@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
-import  { View, Text, StyleSheet } from 'react-native';
+import  { View, Text, StyleSheet, StatusBar, KeyboardAvoidingView } from 'react-native';
+import { Header } from 'react-navigation';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -46,60 +47,75 @@ export default class Login extends React.Component {
 
   render() {
     return(
-      <View style={styles.common}>
-        <View style={styles.header}>
-          <Text style={styles.subHeading}>
-            Efficiently Organize Study Groups
+      <KeyboardAvoidingView keyboardShouldPersistTaps="handled"
+                            behavior="padding"
+                            style={{flex: 1}}
+                            keyboardVerticalOffset={Header.HEIGHT + 20}>
+        <View style={styles.common}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="#6a51ae"
+          />
+          <View style={styles.header}>
+            <Text style={styles.subHeading}>
+              Efficiently Organize Study Groups
+            </Text>
+          </View>
+          <View style={styles.container}>
+            <HelperText
+              type="error"
+              visible={this.state.loginError}
+            >
+              Enter a valid university(.edu) email address
+            </HelperText>
+            <TextInput
+              label='University Email'
+              model="outlined"
+              error={this.state.emailError}
+              value={this.state.email}
+              onChangeText={email => this.setState({ email })}
+              onBlur={this.validateEmail}
+            />
+            <HelperText
+              type="error"
+              visible={this.state.emailError}
+            >
+              Enter a valid university(.edu) email address
+            </HelperText>
+            <TextInput
+              label='Password'
+              model="outlined"
+              secureTextEntry={true}
+              value={this.state.password}
+              onChangeText={password => this.setState({ password })}
+              onSubmitEditing={this.login}
+            />
+          </View>
+          <Text style={styles.forgotPassword}>
+            Forgot Password?
           </Text>
+          <View style={styles.loginButton}>
+            <Button
+              mode="contained"
+              disabled={this.state.email === '' || this.state.password === ''}
+              onPress={this.login}>
+              Login
+            </Button>
+          </View>
+          <View style={{flexDirection: 'row', margin: 10}}>
+            <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
+            <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
+            <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
+          </View>
+          <View style={styles.signUpButton}>
+            <Button
+              mode="outlined"
+              onPress={() => this.props.navigation.navigate('signUp')}>
+              Create New Account
+            </Button>
+          </View>
         </View>
-        <View style={styles.container}>
-          <TextInput
-            label='University Email'
-            model="outlined"
-            error={this.state.emailError}
-            value={this.state.email}
-            onChangeText={email => this.setState({ email })}
-            onBlur={this.validateEmail}
-          />
-          <HelperText
-            type="error"
-            visible={this.state.emailError}
-          >
-            Enter a valid university(.edu) email address
-          </HelperText>
-          <TextInput
-            label='Password'
-            model="outlined"
-            secureTextEntry={true}
-            value={this.state.password}
-            onChangeText={password => this.setState({ password })}
-            onSubmitEditing={this.login}
-          />
-        </View>
-        <Text style={styles.forgotPassword}>
-          Forgot Password?
-        </Text>
-        <View style={styles.loginButton}>
-          <Button
-            mode="contained"
-            disabled={this.state.email === '' || this.state.password === ''}
-            onPress={this.login}>
-            Login
-          </Button>
-        </View>
-        <View style={{flexDirection: 'row', margin: 10}}>
-          <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
-          <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
-          <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
-        </View>
-        <View style={styles.signUpButton}>
-          <Button
-            mode="outlined"
-            onPress={() => this.props.navigation.navigate('signUp')}>
-            Create New Account
-          </Button>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
-import  { View, Text, StyleSheet } from 'react-native';
+import  { View, Text, StyleSheet, StatusBar, KeyboardAvoidingView } from 'react-native';
+import { Header } from 'react-navigation';
+
 
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -65,79 +67,88 @@ export default class SignUp extends React.Component {
 
   render() {
     return(
-      <View style={styles.common}>
-        <View style={styles.header}>
-          <Text style={styles.subHeading}>
-            Efficiently Organize Study Groups
-          </Text>
-        </View>
-        <View style={styles.container}>
-          <TextInput
-            label='Name'
-            model="outlined"
-            value={this.state.name}
-            error={this.state.nameError}
-            onChangeText={name => this.setState({ name })}
-            onBlur={this.validateName}
+      <KeyboardAvoidingView keyboardShouldPersistTaps="handled"
+                            behavior="padding"
+                            style={{flex: 1}}
+                            keyboardVerticalOffset={Header.HEIGHT + 20}>
+        <View style={styles.common}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="#6a51ae"
           />
-          <HelperText
-            type="error"
-            visible={this.state.nameError}
-          >
-            Name can not be empty
-          </HelperText>
-          <TextInput
-            label='University Email'
-            model="outlined"
-            error={this.state.emailError}
-            value={this.state.email}
-            onChangeText={email => this.setState({ email })}
-            onBlur={this.validateEmail}
-          />
-          <HelperText
-            type="error"
-            visible={this.state.emailError}
-          >
-            Enter a valid university(.edu) email address
-          </HelperText>
-          <TextInput
-            label='Password'
-            model="outlined"
-            secureTextEntry={true}
-            value={this.state.password}
-            error={this.state.passwordError}
-            onChangeText={password => this.setState({ password })}
-            onBlur={this.validatePassword}
-            onSubmitEditing={this.signUp}
-          />
-          <HelperText
-            type="error"
-            visible={this.state.passwordError}
-          >
-            Password should contain at least 8 characters
-          </HelperText>
+          <View style={styles.header}>
+            <Text style={styles.subHeading}>
+              Efficiently Organize Study Groups
+            </Text>
+          </View>
+          <View style={styles.container}>
+            <TextInput
+              label='Name'
+              model="outlined"
+              value={this.state.name}
+              error={this.state.nameError}
+              onChangeText={name => this.setState({ name })}
+              onBlur={this.validateName}
+            />
+            <HelperText
+              type="error"
+              visible={this.state.nameError}
+            >
+              Name can not be empty
+            </HelperText>
+            <TextInput
+              label='University Email'
+              model="outlined"
+              error={this.state.emailError}
+              value={this.state.email}
+              onChangeText={email => this.setState({ email })}
+              onBlur={this.validateEmail}
+            />
+            <HelperText
+              type="error"
+              visible={this.state.emailError}
+            >
+              Enter a valid university(.edu) email address
+            </HelperText>
+            <TextInput
+              label='Password'
+              model="outlined"
+              secureTextEntry={true}
+              value={this.state.password}
+              error={this.state.passwordError}
+              onChangeText={password => this.setState({ password })}
+              onBlur={this.validatePassword}
+              onSubmitEditing={this.signUp}
+            />
+            <HelperText
+              type="error"
+              visible={this.state.passwordError}
+            >
+              Password should contain at least 8 characters
+            </HelperText>
+          </View>
+          <View style={styles.signUpButton}>
+            <Button
+              mode="contained"
+              disabled={this.state.email === '' || this.state.password === ''}
+              onPress={this.signUp}>
+              Sign Up
+            </Button>
+          </View>
+          <View style={{flexDirection: 'row', margin: 10}}>
+            <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
+            <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
+            <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
+          </View>
+          <View style={styles.returnButton}>
+            <Button
+              mode="outlined"
+              onPress={() => this.props.navigation.navigate('login')}>
+              Already Have an Account?
+            </Button>
+          </View>
         </View>
-        <View style={styles.signUpButton}>
-          <Button
-            mode="contained"
-            disabled={this.state.email === '' || this.state.password === ''}
-            onPress={this.signUp}>
-            Sign Up
-          </Button>
-        </View>
-        <View style={{flexDirection: 'row', margin: 10}}>
-          <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
-          <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 14 }}>  OR  </Text>
-          <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
-        </View>
-        <View style={styles.returnButton}>
-          <Button
-            mode="outlined"
-            onPress={() => this.props.navigation.navigate('login')}>
-            Already Have an Account?
-          </Button>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }

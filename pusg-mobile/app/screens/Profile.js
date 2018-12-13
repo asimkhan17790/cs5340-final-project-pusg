@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, Button, HelperText, Snackbar } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar } from 'react-native';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -105,7 +105,11 @@ export default class Profile extends React.Component {
       <KeyboardAvoidingView keyboardShouldPersistTaps="handled"
                             behavior="padding"
                             style={{flex: 1}}
-                            keyboardVerticalOffset={Header.HEIGHT + 40}>
+                            keyboardVerticalOffset={Header.HEIGHT + 20}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
         <ScrollView>
           <View style={styles.header}>
             <Text style={styles.subHeading}>

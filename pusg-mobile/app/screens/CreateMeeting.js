@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, Button, HelperText, Caption } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -152,7 +152,11 @@ export default class CreateMeeting extends React.Component {
       <KeyboardAvoidingView keyboardShouldPersistTaps="handled"
                             behavior="padding"
                             style={{flex: 1}}
-                            keyboardVerticalOffset={Header.HEIGHT + 40}>
+                            keyboardVerticalOffset={Header.HEIGHT + 20}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
         <ScrollView>
           <View style={styles.container}>
             <Text style={styles.pageTitle}>
@@ -199,13 +203,15 @@ export default class CreateMeeting extends React.Component {
                 style={styles.input}
                 placeholder="Meeting Time"
                 onChangeText={(searchString) => {this.setState({searchString})}}
+                error={this.state.dateTimeError}
+                onBlur={this.validateDateTime}
                 value={this.state.dateTime.substring(0, 15) + ', ' + this.tConvert(this.state.dateTime.substring(17, 24))}
                 underlineColorAndroid="transparent"
               />
-              <Icon style={styles.searchIcon}
+              <Icon style={styles.calendarIcon}
                     onPress={this._showDateTimePicker}
                     name="calendar" size={26}
-                    color="#6b99a9"/>
+                    color="#4885ed"/>
             </View>
             <HelperText
               type="error"
@@ -277,8 +283,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  searchIcon: {
+  calendarIcon: {
     padding: 10,
+    height: 45,
+    shadowColor: 'grey',
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    }
   },
   input: {
     flex: 1,

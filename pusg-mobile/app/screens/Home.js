@@ -1,6 +1,6 @@
 import React from 'react';
 import { Surface } from 'react-native-paper';
-import  { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import  { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 let navigation = '';
@@ -88,6 +88,10 @@ export default class Home extends React.Component {
   render() {
     return(
       <View style={styles.common}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
         <View style={styles.header}>
           <Text style={styles.subHeading}>
             My Courses

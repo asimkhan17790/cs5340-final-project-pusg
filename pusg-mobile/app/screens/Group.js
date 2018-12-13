@@ -1,6 +1,6 @@
 import React from 'react';
 import { Surface, Button, Dialog, Snackbar, Portal, Paragraph } from 'react-native-paper';
-import  { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import  { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 let navigation = '';
@@ -107,6 +107,10 @@ export default class Home extends React.Component {
   render() {
     return(
       <ScrollView style={styles.common}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
         <View style={styles.header}>
           <Text style={styles.subHeading}>
             CS5340

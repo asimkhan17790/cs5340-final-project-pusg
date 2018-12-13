@@ -1,5 +1,5 @@
 import * as React from 'react';
-import  { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import { BottomNavigation, List, Button } from 'react-native-paper';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -68,12 +68,11 @@ class DiscussionRoute extends React.Component {
       messages: [
         {
           _id: 1,
-          text: "I think we passed the first step of the tutorial. We will now need a Pusher account!",
+          text: "Hey guys can you help me with some doubts?",
           createdAt: new Date(),
           user: {
-            _id: 1,
-            name: "React Native",
-            avatar: "https://placeimg.com/140/140/any"
+            _id: 2,
+            name: "Sabrina A.",
           }
         }
       ]
@@ -89,19 +88,13 @@ class DiscussionRoute extends React.Component {
 
   render() {
     return(
-      <ScrollView>
-        <View style={styles.container}>
-          <Text style={styles.pageTitle}>
-            Group 1
-          </Text>
-          <Text style={styles.courseText}>
-            Course: CS5200
-          </Text>
-        </View>
-        <ScrollView style={styles.chatPage}>
-          <GiftedChat messages={this.state.messages} />
-        </ScrollView>
-      </ScrollView>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={(messages) => this.onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+      />
     )
   }
 }
@@ -119,6 +112,10 @@ class MeetingsRoute extends React.Component {
   render() {
     return(
       <ScrollView>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
         <View style={styles.container}>
           <Text style={styles.pageTitle}>
             Group 1

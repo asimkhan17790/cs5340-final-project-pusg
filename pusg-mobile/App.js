@@ -30,16 +30,17 @@ const AppNavigator = createStackNavigator(
     createGroup: CreateGroup,
     createMeeting: CreateMeeting,
     discussion: Discussion,
-    profile: Profile
+    profile: Profile,
   },
   {
-    initialRouteName: 'createGroup',
+    initialRouteName: 'login',
   }
 );
 
 const App = createAppContainer(AppNavigator);
 
 export default function Main() {
+  console.disableYellowBox = true;
   return (
     <PaperProvider theme={theme}>
       <App />

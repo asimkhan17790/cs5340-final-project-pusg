@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { TextInput, Button, HelperText, Portal, Dialog , TouchableRipple, Subheading } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { TextInput, Button, HelperText, Portal, Dialog } from 'react-native-paper';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar } from 'react-native';
 import constants from '../constants.json';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -78,7 +78,6 @@ export default class CreateGroup extends React.Component {
       autoCompleteHeight: 0,
       createGroupButtonMarginTop: 0,
       visible: false,
-      checked: false
     };
   }
 
@@ -150,12 +149,15 @@ export default class CreateGroup extends React.Component {
 
 
   render() {
-    const { checked } = this.state;
     return(
       <KeyboardAvoidingView keyboardShouldPersistTaps="handled"
                             behavior="padding"
                             style={{flex: 1}}
                             keyboardVerticalOffset={Header.HEIGHT + 20}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
         <ScrollView>
           <View style={styles.header}>
             <Text style={styles.subHeading}>
