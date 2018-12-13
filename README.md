@@ -45,7 +45,3 @@ Steps to test the functionality of the application:
  - Click on the create a new meeting button
 
 
-
-
-App URL:
-/
