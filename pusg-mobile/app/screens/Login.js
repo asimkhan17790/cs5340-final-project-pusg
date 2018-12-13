@@ -10,6 +10,7 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      name: '',
       emailError: false,
       loginError:false
     };
@@ -41,12 +42,23 @@ export default class Login extends React.Component {
 
   get login() {
     return () => {
-      if(this.state.email !== '' && this.state.password !== ''){
-        AsyncStorage.multiset([["email",this.state.email],["password",this.state.password]]).then(data => {
+      this.setState({
+        loginError: false
+      });
+
+      let memberObj = this.validateCredentials();
+      if(!this.state.loginError && this.state.password !== ''  && this.state.email !== '' && memberObj !== ''){
+        AsyncStorage.multiSet([
+          ["courses", JSON.stringify(memberObj.courses)],
+          ["groups", JSON.stringify(memberObj.groups)],
+          ["email", this.state.email],
+          ["password", this.state.password],
+          ["name", memberObj.name]]).then(data => {
           this.props.navigation.navigate('home');
         });
+      } else {
+        console.log("Login Error")
       }
-
     }
   }
 /*
@@ -72,8 +84,18 @@ export default class Login extends React.Component {
 
   validateCredentials = () => {
     const user = constants.studentList.find(item => item.value === this.state.email && item.password === this.state.password);
+    const courses = constants.courses.filter(item => item.members.indexOf(this.state.email) > -1);
+    const groups = constants.groups.filter(item => item.members.indexOf(this.state.email) > -1);
     if (!user) {
-      this.setState({loginError:true});
+      this.setState({
+        loginError:true,
+      });
+      return ''
+    } else {
+      this.setState({
+        name: user["label"]
+      });
+      return {name: user["label"], courses: courses, groups: groups}
     }
   };
 
@@ -103,7 +125,7 @@ export default class Login extends React.Component {
             <TextInput
               label='University Email'
               model="outlined"
-              error={this.state.emailError}
+              error={this.state.emailError || this.state.loginError}
               value={this.state.email}
               onChangeText={email => this.setState({ email })}
               onBlur={this.validateEmail}
@@ -118,7 +140,7 @@ export default class Login extends React.Component {
               label='Password'
               model="outlined"
               secureTextEntry={true}
-              value={this.state.password}
+              value={this.state.password || this.state.loginError}
               onChangeText={password => this.setState({ password })}
               onSubmitEditing={this.login}
             />

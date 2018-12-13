@@ -1,6 +1,6 @@
 import React from 'react';
 import { Surface } from 'react-native-paper';
-import  { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import  { View, Text, StyleSheet, TouchableOpacity, StatusBar, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import constants from '../constants';
 let navigation = '';
@@ -64,8 +64,17 @@ export default class Home extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailError: false
+      emailError: false,
+      courses: [],
+      groups: []
     };
+    AsyncStorage.multiGet(['courses', 'groups']).then((data) => {
+      // console.log("data", data);
+      this.setState({
+        courses: JSON.parse(data[0][1]),
+        groups: JSON.parse(data[1][1])
+      })
+    });
   }
 
   static navigationOptions = {
@@ -97,32 +106,22 @@ export default class Home extends React.Component {
             My Courses
           </Text>
         </View>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('group')}>
-          <Surface style={[styles.courseBox, styles.box1]}>
-            <Text style={styles.courseTitle}>
-              CS 5340
-            </Text>
-            <Text style={styles.courseDescription}>
-              Name: {"\n"}
-              Computer/Human Interaction {"\n"} {"\n"}
-              Professor:{"\n"}
-              Jorge Toro
-            </Text>
-          </Surface>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('group')}>
-          <Surface style={[styles.courseBox, styles.box2]}>
-            <Text style={styles.courseTitle}>
-              CS 5200
-            </Text>
-            <Text style={styles.courseDescription}>
-              Name: {"\n"}
-              Database Management {"\n"} {"\n"}
-              Professor:{"\n"}
-              Jose Annunziato
-            </Text>
-          </Surface>
-        </TouchableOpacity>
+        {this.state.courses.length === 0 ? (<Text>You are not registered for any courses</Text>): ''}
+        {this.state.courses.map((course, index) => (
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('group', {courseId: course.courseId})}>
+            <Surface style={[styles.courseBox, index%2 === 0 ? styles.box1 : styles.box2]}>
+              <Text style={styles.courseTitle}>
+                {course.courseId}
+              </Text>
+              <Text style={styles.courseDescription}>
+                Name: {"\n"}
+                {course.name} {"\n"} {"\n"}
+                Professor:{"\n"}
+                {course.prof}
+              </Text>
+            </Surface>
+          </TouchableOpacity>
+        ))}
       </View>
     )
   }

@@ -29,7 +29,7 @@
     {
       "name": "Group B",
       "id": "4",
-      "description": "Bi-weekly group with meetings on Wednesdays and Fridays at 6",
+      "description": "Weekly group with meetings on Wednesdays at 6",
       "members": ["brandon.c@husky.neu.edu"],
       "course": "CS5340"
     }
@@ -39,7 +39,7 @@
       "members": ["sabrina.a@husky.neu.edu"]
     },
     {"name": "Computer/Human Interaction", "courseId": "CS5340", "prof": "Jorge Toro", "groupIds": ["3", "4"],
-      "members": ["brandon.c@husky.neu.edu","charlie.a@husky.neu.edu"]}
+      "members": ["sabrina.a@husky.neu.edu", "brandon.c@husky.neu.edu","charlie.a@husky.neu.edu"]}
   ],
   "users": [
     {"name": "Sabrina A.", "email": "sabrina.a@husky.neu.edu", "password": "1234"},
@@ -52,7 +52,8 @@
       "sender": "Sabrina A.",
       "content": "Hey guys! Does anyone know how to submit the new assignment?",
       "date": "12/05/2018",
-      "time": "04:29 PM"
+      "time": "04:29 PM",
+      "groupId": 1
     }
   ],
   "meetings": [
@@ -60,7 +61,6 @@
       "title": "Discuss ER Model and NoSQL",
       "groupId": "1",
       "date": "December 20, 2018",
-      "time": "6:00 PM",
       "location": "Snell Library 108"
     }
   ]

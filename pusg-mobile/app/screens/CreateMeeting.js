@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextInput, Button, HelperText, Caption } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar } from 'react-native';
+import { TextInput, Button, HelperText } from 'react-native-paper';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar, AsyncStorage } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -72,6 +72,11 @@ export default class CreateMeeting extends React.Component {
       dateTimeError: false,
       isDateTimePickerVisible: false,
     };
+    AsyncStorage.multiGet(['email', 'password', 'name']).then((data) => {
+      let email = data[0][1];
+      let password = data[1][1];
+      let name = data[2][1];
+    })
   }
 
   _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });

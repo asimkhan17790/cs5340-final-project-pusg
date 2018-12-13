@@ -1,7 +1,8 @@
 import React from 'react';
 import { Surface, Button, Dialog, Snackbar, Portal, Paragraph } from 'react-native-paper';
-import  { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import  { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import constants from '../constants';
 
 let navigation = '';
 
@@ -57,17 +58,34 @@ class HeaderRight extends React.Component {
   };
 }
 
-export default class Home extends React.Component {
+export default class Group extends React.Component {
   constructor(props) {
     super(props);
     navigation = this.props.navigation;
     this.state = {
       email: '',
       password: '',
+      courseId: navigation.getParam('courseId', 'CS5200'),
       emailError: false,
       visible: false,
-      snackBarVisible: false
+      snackBarVisible: false,
+      course: {},
+      groups: [],
+      otherGroups: [],
+      groupJoining: {}
     };
+    AsyncStorage.multiGet(['courses', 'groups', 'email']).then((data) => {
+      let course = JSON.parse(data[0][1]).find((item) => item.courseId === this.state.courseId);
+      let userEmail = data[2][1];
+      let otherGroups = constants["groups"].filter(item => item.course === course.courseId && !item.members.includes(userEmail));
+      let groups = JSON.parse(data[1][1]).filter(item => item.course === course.courseId && item.members.includes(userEmail));
+      this.setState({
+        course: course,
+        groups: groups,
+        email: userEmail,
+        otherGroups: otherGroups
+      });
+    });
   }
 
   static navigationOptions = ({navigation}) => ({
@@ -89,7 +107,10 @@ export default class Home extends React.Component {
     headerRight: (<HeaderRight/>)
   });
 
-  _showDialog = () => this.setState({ visible: true });
+  _showDialog = (group) => this.setState({
+    visible: true,
+    groupJoining: group
+  });
 
   _hideDialog = () => {
     this.setState({
@@ -98,11 +119,27 @@ export default class Home extends React.Component {
   };
 
   _registerGroup = () => {
-    this.setState({
+
+    this.setState((prevState) => ({
       visible: false,
-      snackBarVisible: true
-    })
+      snackBarVisible: true,
+      groups: [...prevState.groups, this.state.groupJoining],
+      otherGroups: [...prevState.otherGroups.slice(0, prevState.otherGroups.indexOf(this.state.groupJoining)),
+        ...prevState.otherGroups.slice(prevState.otherGroups.indexOf(this.state.groupJoining) + 1, prevState.otherGroups.length)]
+    }));
+
+    let groupList = constants.groups;
+
+    groupList.map(item => {
+      if(item.id === this.state.groupJoining.id) {
+        item.members.push(this.state.email);
+      }});
+    console.log("group", groupList);
+    AsyncStorage.setItem("groups", JSON.stringify(groupList)).then((res) => {
+      console.log("Updated successfully!")
+    });
   };
+
 
   render() {
     return(
@@ -113,11 +150,11 @@ export default class Home extends React.Component {
         />
         <View style={styles.header}>
           <Text style={styles.subHeading}>
-            CS5340
+            {this.state.courseId}
           </Text>
           <Text style={styles.courseDescription}>
-            Name: Human/Computer Interaction {"\n"}
-            Professor: Jorge Toro
+            {this.state.course.name} {"\n"}
+            {this.state.course.prof}
           </Text>
         </View>
         <View style={{flexDirection: 'row', margin: 10}}>
@@ -126,21 +163,15 @@ export default class Home extends React.Component {
           <View style={{backgroundColor: '#444', height: 1, flex: 1, alignSelf: 'center'}} />
         </View>
         <View style={{flex: 1, flexDirection: 'row', alignSelf: 'center'}}>
-          <TouchableOpacity onPress={() => {this.props.navigation.navigate('discussion')}}>
-            <Surface style={[styles.groupBox, styles.box1]}>
-              <Text style={styles.groupName}>
-               Group 1
-              </Text>
-            </Surface>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => {this.props.navigation.navigate('discussion')}}>
-            <Surface style={[styles.groupBox, styles.box2]}>
-              <Text style={styles.groupName}>
-                Group 2
-              </Text>
-            </Surface>
-          </TouchableOpacity>
+          {this.state.groups.map((group, index) => (
+            <TouchableOpacity onPress={() => {this.props.navigation.navigate('discussion', {'groupId': group.id})}}>
+              <Surface style={[styles.groupBox, index%2===0 ? styles.box2 : styles.box1]}>
+                <Text style={styles.groupName}>
+                  {group.name}
+                </Text>
+              </Surface>
+            </TouchableOpacity>
+          ))}
         </View>
 
         <View style={{flexDirection: 'row', margin: 10}}>
@@ -149,16 +180,19 @@ export default class Home extends React.Component {
           <View style={{backgroundColor: '#888', height: 1, flex: 1, alignSelf: 'center'}} />
         </View>
 
-        <View style={{flexDirection: 'row', marginHorizontal: 10, alignItems: 'center', justifyContent: 'space-between'}}>
-          <Text style={{textAlign: 'left', fontSize: 16, marginTop: 7, color: '#3b5b66'}}>
-            Group 3
-          </Text>
-          <View style={{flexDirection: 'column', justifyContent: 'flex-end'}}>
-            <Button mode="outlined" onPress={this._showDialog}>
-              Join
-            </Button>
-          </View>
-        </View>
+          {this.state.otherGroups.map((otherGroup) => (
+
+            <View style={{flexDirection: 'row', marginHorizontal: 10, alignItems: 'center', justifyContent: 'space-between'}}>
+              <Text style={{textAlign: 'left', fontSize: 16, marginTop: 7, color: '#3b5b66'}}>
+                {otherGroup.name}
+              </Text>
+              <View style={{justifyContent: 'flex-end'}}>
+                <Button mode="outlined" onPress={() => this._showDialog(otherGroup)}>
+                  Join
+                </Button>
+              </View>
+            </View>
+          ))}
         <View style={{flexDirection: 'row', margin: 10, marginTop: 20}}>
           <View style={{backgroundColor: '#999', height: 1, flex: 1, alignSelf: 'center'}} />
         </View>

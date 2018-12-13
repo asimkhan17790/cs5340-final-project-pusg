@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, Button, HelperText, Snackbar } from 'react-native-paper';
-import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar } from 'react-native';
+import  { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, StatusBar, AsyncStorage } from 'react-native';
 import { Header } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -47,6 +47,22 @@ export default class Profile extends React.Component {
       nameError: false,
       emailError: false,
     };
+    console.log("Initialize")
+  }
+
+  componentDidMount() {
+    AsyncStorage.multiGet(['email', 'password', 'name']).then((data) => {
+      console.log(data);
+      let email = data[0][1];
+      let password = data[1][1];
+      let name = data[2][1];
+      console.log("name", name);
+      this.setState({
+        email: email,
+        password: password,
+        name: name
+      });
+    });
   }
 
   get validateEmail() {

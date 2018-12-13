@@ -128,13 +128,13 @@ class MeetingsRoute extends React.Component {
           <List.Accordion
             title="Past Meetings"
           >
-            <List.Item title="First item" />
+            <List.Item title="Discuss Doubts about Chapter 1" />
           </List.Accordion>
 
           <List.Accordion
             title="Upcoming Meetings"
           >
-            <List.Item title="First item" />
+            <List.Item title="Weekly Discussion Meeting" />
           </List.Accordion>
         </List.Section>
         <View style={styles.createMeetingButton}>
