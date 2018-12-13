@@ -2,7 +2,7 @@ import React from 'react';
 import { Surface } from 'react-native-paper';
 import  { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import constants from '../constants';
 let navigation = '';
 
 class HeaderRight extends React.Component {

@@ -1,8 +1,8 @@
 {
   "studentList": [
-    {"label": "Sabrina A.", "value": "sabrina.a@husky.neu.edu"},
-    {"label": "Brandon C.", "value": "brandon.c@husky.neu.edu"},
-    {"label": "Charlie A.", "value": "charlie.a@husky.neu.edu"}
+    {"label": "Sabrina A.", "value": "sabrina.a@husky.neu.edu","password": "password"},
+    {"label": "Brandon C.", "value": "brandon.c@husky.neu.edu","password": "password1"},
+    {"label": "Charlie A.", "value": "charlie.a@husky.neu.edu","password": "password2"}
   ],
   "groups": [
     {
@@ -35,8 +35,11 @@
     }
   ],
   "courses": [
-    {"name": "Database Management", "courseId": "CS5200", "prof": "Jose Annunziato", "groupIds": ["1", "2"]},
-    {"name": "Computer/Human Interaction", "courseId": "CS5340", "prof": "Jorge Toro", "groupIds": ["3", "4"]}
+    {"name": "Database Management", "courseId": "CS5200", "prof": "Jose Annunziato", "groupIds": ["1", "2"],
+      "members": ["sabrina.a@husky.neu.edu"]
+    },
+    {"name": "Computer/Human Interaction", "courseId": "CS5340", "prof": "Jorge Toro", "groupIds": ["3", "4"],
+      "members": ["brandon.c@husky.neu.edu","charlie.a@husky.neu.edu"]}
   ],
   "users": [
     {"name": "Sabrina A.", "email": "sabrina.a@husky.neu.edu", "password": "1234"},

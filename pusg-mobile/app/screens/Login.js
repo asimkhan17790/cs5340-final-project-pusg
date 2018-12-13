@@ -1,7 +1,8 @@
 import React from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
-import  { View, Text, StyleSheet, StatusBar, KeyboardAvoidingView } from 'react-native';
+import  { View, Text, StyleSheet, StatusBar, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 import { Header } from 'react-navigation';
+import constants from '../constants.json';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -9,7 +10,8 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailError: false
+      emailError: false,
+      loginError:false
     };
   }
 
@@ -40,10 +42,40 @@ export default class Login extends React.Component {
   get login() {
     return () => {
       if(this.state.email !== '' && this.state.password !== ''){
-        this.props.navigation.navigate('home');
+        AsyncStorage.multiset([["email",this.state.email],["password",this.state.password]]).then(data => {
+          this.props.navigation.navigate('home');
+        });
       }
+
     }
   }
+/*
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.');
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('TASKS');
+      if (value !== null) {
+        // We have data!!
+        console.log(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };*/
+
+  validateCredentials = () => {
+    const user = constants.studentList.find(item => item.value === this.state.email && item.password === this.state.password);
+    if (!user) {
+      this.setState({loginError:true});
+    }
+  };
 
   render() {
     return(
@@ -66,7 +98,7 @@ export default class Login extends React.Component {
               type="error"
               visible={this.state.loginError}
             >
-              Enter a valid university(.edu) email address
+              Invalid Credentials
             </HelperText>
             <TextInput
               label='University Email'
